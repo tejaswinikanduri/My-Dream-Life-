@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f5efe5">
+<meta name="description" content="A little place for big dreams. Keep your bucket list close.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>My Dream Life — Bucket List</title>
+<style>
+:root{
+  --bg:#f7f3ec;--paper:#fffdf9;--ink:#51483f;--muted:#968a7d;
+  --sage:#a8b5a0;--sage-dark:#66765f;--pink:#e9c9c5;--lav:#d9d2e8;
+  --butter:#eee1b9;--line:#eee6dc;--shadow:0 12px 35px rgba(92,75,56,.08);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,"Segoe UI",Arial,sans-serif}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.app{max-width:1120px;margin:auto;padding:28px 22px 60px}
+header{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:26px}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:48px;height:48px;border-radius:17px;background:#e6e9df;display:grid;place-items:center;font-size:24px}
+.eyebrow{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:0 0 5px}
+h1{font-family:Georgia,serif;font-weight:500;font-size:clamp(25px,4vw,36px);margin:0}
+.header-note{color:var(--muted);font-size:13px}
+.hero{background:linear-gradient(120deg,#e8ece3,#f2e7e2 60%,#f2ead5);border-radius:28px;padding:30px 32px;display:flex;justify-content:space-between;align-items:center;gap:20px;box-shadow:var(--shadow);margin-bottom:20px}
+.hero h2{font:500 clamp(24px,4vw,34px) Georgia,serif;margin:0 0 8px}
+.hero p{margin:0;color:#766c62;line-height:1.6;max-width:540px}
+.hero-mark{font-size:64px;opacity:.85}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px}
+.stat{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:18px 20px}
+.stat small{color:var(--muted);display:block;margin-bottom:7px}
+.stat strong{font:500 27px Georgia,serif}
+.progress-track{height:7px;background:#eee9e1;border-radius:20px;overflow:hidden;margin-top:12px}
+.progress-fill{height:100%;width:0;background:var(--sage-dark);border-radius:20px;transition:width .3s}
+.toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:24px 0 16px;flex-wrap:wrap}
+.toolbar h3{font:500 23px Georgia,serif;margin:0}
+.actions{display:flex;gap:9px;flex-wrap:wrap}
+.btn{border:0;border-radius:13px;padding:11px 15px;background:#e6e9df;color:#53614d;font-weight:600}
+.btn.primary{background:var(--sage-dark);color:white}
+.btn.soft{background:#f0e6df;color:#78665c}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--muted)}
+.filters{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:16px}
+input,select,textarea{background:#fffdfa;border:1px solid var(--line);border-radius:12px;padding:12px;color:var(--ink);outline:none}
+input:focus,select:focus,textarea:focus{border-color:#a8b5a0;box-shadow:0 0 0 3px #a8b5a022}
+#search{flex:1;min-width:180px}
+#categoryFilter{min-width:155px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.dream{background:var(--paper);border:1px solid var(--line);border-radius:21px;padding:18px;box-shadow:0 5px 18px rgba(92,75,56,.035);display:flex;flex-direction:column;min-height:190px}
+.dream-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.emoji{width:42px;height:42px;border-radius:14px;background:#f0eee7;display:grid;place-items:center;font-size:22px}
+.category{font-size:11px;letter-spacing:.7px;text-transform:uppercase;color:var(--muted)}
+.dream h4{font:500 20px Georgia,serif;margin:14px 0 7px}
+.dream p{color:var(--muted);font-size:13px;line-height:1.5;margin:0 0 15px;white-space:pre-wrap}
+.dream-bottom{margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.status{font-size:11px;border-radius:30px;padding:6px 9px;background:#edf0e9;color:#687760}
+.status.done{background:#f3e7e4;color:#9b706b}
+.card-actions{display:flex;gap:5px}
+.icon-btn{border:0;background:transparent;color:#94887c;padding:6px;border-radius:8px}
+.icon-btn:hover{background:#f3eee7}
+.completed h4{text-decoration:line-through;color:#9b9187}
+.completed{opacity:.8}
+.empty{grid-column:1/-1;text-align:center;background:var(--paper);padding:48px 20px;border:1px dashed #ded4c8;border-radius:20px;color:var(--muted)}
+.empty .big{font-size:40px;margin-bottom:10px}
+footer{text-align:center;color:#a29689;font-size:12px;margin-top:36px}
+.modal-backdrop{position:fixed;inset:0;background:#3c332d66;display:none;align-items:center;justify-content:center;padding:18px;z-index:5}
+.modal-backdrop.show{display:flex}
+.modal{width:min(100%,480px);background:var(--paper);border-radius:24px;padding:24px;box-shadow:var(--shadow);max-height:90vh;overflow:auto}
+.modal h3{font:500 25px Georgia,serif;margin:0 0 18px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{display:flex;flex-direction:column;gap:7px;margin-bottom:13px}
+.field label{font-size:12px;color:var(--muted)}
+textarea{resize:vertical;min-height:84px}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+.hidden{display:none!important}
+@media(max-width:800px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){
+ .app{padding:18px 14px 42px}header{align-items:flex-start}.header-note{display:none}
+ .hero{padding:23px 21px;border-radius:22px}.hero-mark{font-size:43px}
+ .stats{gap:8px}.stat{padding:13px 12px;border-radius:16px}.stat strong{font-size:23px}.stat small{font-size:11px}
+ .grid{grid-template-columns:1fr}.dream{min-height:165px}
+ .toolbar{align-items:flex-start}.actions{width:100%}.actions .btn{flex:1}
+ .form-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand">
+      <div class="logo">✿</div>
+      <div><p class="eyebrow">A little place for big dreams</p><h1>My Dream Life</h1></div>
+    </div>
+    <div class="header-note">your dreams, your timeline ♡</div>
+  </header>
+
+  <section class="hero">
+    <div><p class="eyebrow">The life I'm creating</p><h2>Dream it. Plan it. Live it.</h2>
+    <p>Every little dream deserves a place here. Add your wishes, celebrate your progress, and enjoy the journey.</p></div>
+    <div class="hero-mark">☁️🌷</div>
+  </section>
+
+  <section class="stats">
+    <div class="stat"><small>Total dreams</small><strong id="totalCount">0</strong></div>
+    <div class="stat"><small>Completed</small><strong id="doneCount">0</strong></div>
+    <div class="stat"><small>Dreams come true</small><strong id="percentCount">0%</strong><div class="progress-track"><div class="progress-fill" id="progressFill"></div></div></div>
+  </section>
+
+  <div class="toolbar">
+    <h3>My bucket list</h3>
+    <div class="actions">
+      <button class="btn primary" id="addBtn">＋ Add a dream</button>
+      <button class="btn soft" id="exportBtn">↓ Backup</button>
+      <button class="btn ghost" id="importBtn">↑ Restore</button>
+      <input type="file" id="importFile" accept="application/json,.json" class="hidden">
+    </div>
+  </div>
+
+  <div class="filters">
+    <input id="search" type="search" placeholder="Search your dreams…">
+    <select id="categoryFilter">
+      <option value="All">All categories</option>
+      <option>Travel</option><option>Career</option><option>Life Goals</option>
+      <option>Personal Growth</option><option>Experiences</option><option>Other</option>
+    </select>
+    <select id="statusFilter">
+      <option value="All">All dreams</option><option value="Pending">Not yet done</option><option value="Completed">Completed</option>
+    </select>
+  </div>
+
+  <section class="grid" id="dreamGrid"></section>
+  <footer>Made with love for the life you dream of ✿</footer>
+</div>
+
+<div class="modal-backdrop" id="modalBackdrop">
+  <form class="modal" id="dreamForm">
+    <h3 id="modalTitle">Add a new dream ✨</h3>
+    <input type="hidden" id="dreamId">
+    <div class="field"><label for="dreamTitle">Your dream *</label><input id="dreamTitle" maxlength="90" required placeholder="e.g. Visit Thailand"></div>
+    <div class="form-row">
+      <div class="field"><label for="dreamCategory">Category</label><select id="dreamCategory"><option>Travel</option><option>Career</option><option>Life Goals</option><option>Personal Growth</option><option>Experiences</option><option>Other</option></select></div>
+      <div class="field"><label for="dreamEmoji">Emoji</label><input id="dreamEmoji" maxlength="6" value="🌷" placeholder="🌷"></div>
+    </div>
+    <div class="field"><label for="dreamNotes">A little note (optional)</label><textarea id="dreamNotes" maxlength="500" placeholder="Why does this dream matter to you?"></textarea></div>
+    <div class="modal-actions"><button type="button" class="btn ghost" id="cancelBtn">Cancel</button><button type="submit" class="btn primary">Save dream</button></div>
+  </form>
+</div>
+
+<script>
+(() => {
+  const STORAGE_KEY = "myDreamLifeBucketList_v1";
+  const starterDreams = [
+    {id:"starter-1",title:"Visit Thailand",category:"Travel",emoji:"🇹🇭",notes:"Explore Bangkok and Pattaya.",done:false},
+    {id:"starter-2",title:"Visit Araku Valley",category:"Travel",emoji:"🏞️",notes:"Enjoy the beautiful hills.",done:false},
+    {id:"starter-3",title:"Build my dream house",category:"Life Goals",emoji:"🏡",notes:"A peaceful home for my family.",done:false},
+    {id:"starter-4",title:"Become financially independent",category:"Life Goals",emoji:"🌱",notes:"Build a secure and independent life.",done:false},
+    {id:"starter-5",title:"Get my dream job",category:"Career",emoji:"💼",notes:"Keep learning and moving forward.",done:false}
+  ];
+  let dreams = loadDreams();
+  const $ = id => document.getElementById(id);
+  const grid = $("dreamGrid");
+  const escapeHTML = value => String(value ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+  function loadDreams(){
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if(saved === null) return starterDreams;
+      const parsed = JSON.parse(saved);
+      return Array.isArray(parsed) ? parsed : starterDreams;
+    } catch { return starterDreams; }
+  }
+  function save(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(dreams)); }
+  function render(){
+    const total = dreams.length, done = dreams.filter(d=>d.done).length;
+    const pct = total ? Math.round(done/total*100) : 0;
+    $("totalCount").textContent = total;
+    $("doneCount").textContent = done;
+    $("percentCount").textContent = pct + "%";
+    $("progressFill").style.width = pct + "%";
+    const q = $("search").value.trim().toLowerCase();
+    const cat = $("categoryFilter").value, status = $("statusFilter").value;
+    const filtered = dreams.filter(d =>
+      (cat === "All" || d.category === cat) &&
+      (status === "All" || (status === "Completed" ? d.done : !d.done)) &&
+      (d.title.toLowerCase().includes(q) || (d.notes||"").toLowerCase().includes(q))
+    );
+    if(!filtered.length){
+      grid.innerHTML = `<div class="empty"><div class="big">🌼</div><strong>No dreams found just yet</strong><p>Add a dream or try another filter.</p></div>`;
+      return;
+    }
+    grid.innerHTML = filtered.map(d => `
+      <article class="dream ${d.done ? "completed":""}">
+        <div class="dream-top"><div class="emoji">${escapeHTML(d.emoji || "🌷")}</div>
+          <div class="card-actions">
+            <button class="icon-btn" title="Edit dream" aria-label="Edit dream" data-action="edit" data-id="${escapeHTML(d.id)}">✎</button>
+            <button class="icon-btn" title="Delete dream" aria-label="Delete dream" data-action="delete" data-id="${escapeHTML(d.id)}">⌫</button>
+          </div>
+        </div>
+        <div class="category">${escapeHTML(d.category)}</div>
+        <h4>${escapeHTML(d.title)}</h4>
+        ${d.notes ? `<p>${escapeHTML(d.notes)}</p>` : `<p></p>`}
+        <div class="dream-bottom">
+          <span class="status ${d.done ? "done":""}">${d.done ? "✓ Completed" : "♡ Someday soon"}</span>
+          <button class="btn ${d.done ? "ghost":"soft"}" data-action="toggle" data-id="${escapeHTML(d.id)}">${d.done ? "Undo" : "Mark done"}</button>
+        </div>
+      </article>`).join("");
+  }
+  function openModal(dream){
+    $("dreamForm").reset();
+    $("dreamId").value = dream?.id || "";
+    $("modalTitle").textContent = dream ? "Edit your dream ✨" : "Add a new dream ✨";
+    $("dreamTitle").value = dream?.title || "";
+    $("dreamCategory").value = dream?.category || "Travel";
+    $("dreamEmoji").value = dream?.emoji || "🌷";
+    $("dreamNotes").value = dream?.notes || "";
+    $("modalBackdrop").classList.add("show");
+    $("dreamTitle").focus();
+  }
+  function closeModal(){ $("modalBackdrop").classList.remove("show"); }
+  $("addBtn").addEventListener("click",()=>openModal());
+  $("cancelBtn").addEventListener("click",closeModal);
+  $("modalBackdrop").addEventListener("click",e=>{if(e.target === $("modalBackdrop")) closeModal();});
+  $("dreamForm").addEventListener("submit",e=>{
+    e.preventDefault();
+    const id = $("dreamId").value;
+    const item = {id:id || (crypto.randomUUID ? crypto.randomUUID() : String(Date.now())),title:$("dreamTitle").value.trim(),category:$("dreamCategory").value,emoji:$("dreamEmoji").value.trim() || "🌷",notes:$("dreamNotes").value.trim(),done:false};
+    if(!item.title) return;
+    if(id){const old=dreams.find(d=>d.id===id);item.done=old?.done || false;dreams=dreams.map(d=>d.id===id?item:d);}
+    else dreams.unshift(item);
+    save();render();closeModal();
+  });
+  grid.addEventListener("click",e=>{
+    const btn=e.target.closest("button[data-action]");
+    if(!btn) return;
+    const {action,id}=btn.dataset, item=dreams.find(d=>d.id===id);
+    if(!item) return;
+    if(action==="toggle"){item.done=!item.done;save();render();}
+    if(action==="edit") openModal(item);
+    if(action==="delete" && confirm(`Delete “${item.title}” from your bucket list?`)){dreams=dreams.filter(d=>d.id!==id);save();render();}
+  });
+  ["search","categoryFilter","statusFilter"].forEach(id=>$(id).addEventListener(id==="search"?"input":"change",render));
+  $("exportBtn").addEventListener("click",()=>{
+    const blob=new Blob([JSON.stringify(dreams,null,2)],{type:"application/json"});
+    const url=URL.createObjectURL(blob),a=document.createElement("a");
+    a.href=url;a.download="my-dream-life-backup.json";a.click();URL.revokeObjectURL(url);
+  });
+  $("importBtn").addEventListener("click",()=>$("importFile").click());
+  $("importFile").addEventListener("change",async e=>{
+    const file=e.target.files[0];if(!file)return;
+    try{
+      const parsed=JSON.parse(await file.text());
+      if(!Array.isArray(parsed) || !parsed.every(d=>d && typeof d.title==="string")) throw new Error("Invalid file");
+      if(confirm("Restore this backup? It will replace the dreams currently saved in this browser.")){
+        dreams=parsed.map(d=>({id:String(d.id||Date.now()+Math.random()),title:d.title,category:d.category||"Other",emoji:d.emoji||"🌷",notes:d.notes||"",done:Boolean(d.done)}));
+        save();render();
+      }
+    }catch{alert("That file doesn't look like a valid Bucket List backup.");}
+    e.target.value="";
+  });
+  render();
+})();
+</script>
+<script>
+if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js").catch(console.error);
+  });
+}
+</script>
+</body>
+</html>
